@@ -1,0 +1,36 @@
+[project]
+name = "pg-ledger-sheets"
+version = "0.1.0"
+description = "Append-only export of Postgres rows to a Google Sheets ledger with daily totals and monthly summary"
+readme = "README.md"
+license = "MIT"
+requires-python = ">=3.12"
+dependencies = ["psycopg[binary]>=3.2,<4", "gspread>=6.1,<7"]
+
+[project.optional-dependencies]
+xlsx = ["openpyxl>=3.1"]
+
+[project.scripts]
+pg-ledger-sheets = "pg_ledger_sheets.cli:main"
+
+[dependency-groups]
+dev = ["pytest", "pyright", "ruff", "openpyxl"]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.ruff]
+line-length = 160
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP", "RUF"]
+ignore = ["RUF001", "RUF002", "RUF003"]
+
+[tool.pyright]
+typeCheckingMode = "strict"
+include = ["pg_ledger_sheets", "examples"]
+
+[tool.pytest.ini_options]
+pythonpath = ["examples"]

@@ -1,0 +1,12 @@
+[Unit]
+Description=pg-ledger-sheets: Postgres -> Google Sheets
+After=docker.service network-online.target
+Requires=docker.service
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+TimeoutStartSec=5min
+EnvironmentFile=/etc/pg-ledger-sheets/env
+ExecStart=/usr/bin/docker run --rm --name pg-ledger-sheets --network ${LEDGER_NETWORK} --env-file /etc/pg-ledger-sheets/env -v /etc/pg-ledger-sheets/service-account.json:/key.json:ro -v /var/lib/pg-ledger-sheets:/state --read-only --cap-drop ALL --security-opt no-new-privileges --memory 256m pg-ledger-sheets sync
+ExecStopPost=-/usr/bin/docker rm -f pg-ledger-sheets
